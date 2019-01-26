@@ -1,0 +1,6 @@
+github.com/cznic/golex v0.0.0-20181122101858-9c343928389c h1:G8zTsaqyVfIHpgMFcGgdbhHSFhlNc77rAKkhVbQ9kQg=
+github.com/cznic/golex v0.0.0-20181122101858-9c343928389c/go.mod h1:+bmmJDNmKlhWNG+gwWCkaBoTy39Fs+bzRxVBzoTQbIc=
+github.com/yookoala/realpath v1.0.0 h1:7OA9pj4FZd+oZDsyvXWQvjn5oBdcHRTV44PpdMSuImQ=
+github.com/yookoala/realpath v1.0.0/go.mod h1:gJJMA9wuX7AcqLy1+ffPatSCySA1FQ2S8Ya9AIoYBpE=
+github.com/z7zmey/php-parser v0.5.1 h1:0czHhSNnVo1rnM4XNlLGeURln5anNmzhRDmlial+UG8=
+github.com/z7zmey/php-parser v0.5.1/go.mod h1:xnGTLhHQs5VFWzvKo1wMgEjVwclZmQybMDeEBMBN/AU=
