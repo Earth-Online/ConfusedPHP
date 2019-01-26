@@ -10,6 +10,7 @@ import (
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+// get random string
 func RandStringBytes(n int) string {
 	b := make([]byte, n)
 	for i := range b {
@@ -26,11 +27,13 @@ func RandConfused() bool {
 	return false
 }
 
+// php definition E.g function
 var DefinitionType = []reflect.Type{
 	reflect.TypeOf(&stmt.Class{}),
 	reflect.TypeOf(&stmt.Function{}),
 }
 
+// Determine if node  is  sDefinitionType
 func IsDefinitionType(n *node.Node) bool {
 	for _, val := range DefinitionType {
 		if val == reflect.TypeOf(n) {

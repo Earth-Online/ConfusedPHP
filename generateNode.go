@@ -8,6 +8,9 @@ import (
 	"github.com/z7zmey/php-parser/node/stmt"
 )
 
+// get assign node. E.g. $a=2
+// name: var name
+// value: var value
 func GetAssign(name string, value node.Node) node.Node {
 	var n node.Node
 	n = &stmt.Expression{
@@ -23,6 +26,7 @@ func GetAssign(name string, value node.Node) node.Node {
 	return n
 }
 
+// get function call. E.g. base64("123")
 func GetFunctionCall(name node.Node, args *node.ArgumentList) (n node.Node) {
 	n = &expr.FunctionCall{
 		Function:     name,
@@ -31,6 +35,7 @@ func GetFunctionCall(name node.Node, args *node.ArgumentList) (n node.Node) {
 	return
 }
 
+// get a only ret value function.E.g function a(){ return 1;}
 func GetFunctionRet(funcName string, ret node.Node) (n node.Node) {
 	n = &stmt.Function{
 		FunctionName: &name.Name{
@@ -45,6 +50,7 @@ func GetFunctionRet(funcName string, ret node.Node) (n node.Node) {
 	return
 }
 
+// get a arg list
 func GetFunctionArg(nodes ...node.Node) (n node.Node) {
 	var args []node.Node
 	for _, value := range nodes {
@@ -57,6 +63,7 @@ func GetFunctionArg(nodes ...node.Node) (n node.Node) {
 	return
 }
 
+// get a php class. E.g class a {}
 func GetClass(name string, stmts []node.Node) (n node.Node) {
 	n = &stmt.Class{
 		PhpDocComment: "",
@@ -66,6 +73,7 @@ func GetClass(name string, stmts []node.Node) (n node.Node) {
 	return
 }
 
+// get a php class static fetch e.g foo::abc
 func GetStaticPropertyFetch(className string, varName string) (n node.Node) {
 	n = &expr.StaticPropertyFetch{
 		Class: &name.Name{

@@ -6,15 +6,20 @@ import (
 	"os"
 )
 
+// php file
 type Shell struct {
+	// php file name
 	Filename string
-	Code     *php7.Parser
+	// parser
+	Code *php7.Parser
 }
 
+// create new shell
 func NewShell(filename string) *Shell {
 	return &Shell{Filename: filename}
 }
 
+// parser code
 func (s *Shell) Parser() (err error) {
 	file, err := os.Open(s.Filename)
 	if err != nil {
@@ -26,6 +31,7 @@ func (s *Shell) Parser() (err error) {
 	return
 }
 
+// get code root node
 func (s *Shell) GetRoot() node.Node {
 	return s.Code.GetRootNode()
 }

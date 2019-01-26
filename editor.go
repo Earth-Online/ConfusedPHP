@@ -42,8 +42,11 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 		return nil
 
 	case *name.Name:
+		return nil
 	case *name.NamePart:
+		return nil
 	case *name.Relative:
+		return nil
 	case *name.FullyQualified:
 		return nil
 
@@ -179,11 +182,8 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 	case *stmt.Global:
 	case *stmt.Use:
 	case *stmt.UseList:
-	case *stmt.Catch:
 	case *stmt.Finally:
 		return nil
-
-	case *stmt.Try:
 
 	case *stmt.While:
 		err = e.EditNode(&value.(*stmt.While).Cond)
@@ -195,15 +195,38 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 	case *stmt.Expression:
 		return e.EditNode(&value.(*stmt.Expression).Expr)
 	case *stmt.Echo:
-	case *stmt.Break:
 	case *stmt.Nop:
+		return nil
+
+	case *stmt.Try:
+		err = e.EditNodes(&value.(*stmt.Try).Stmts)
+		if err != nil {
+			return
+		}
+		err = e.EditNodes(&value.(*stmt.Try).Catches)
+		if err != nil {
+			return
+		}
+		err = e.EditNode(&value.(*stmt.Try).Finally)
+		return err
+	case *stmt.Catch:
+		err = e.EditNodes(&value.(*stmt.Catch).Stmts)
+		return nil
 	case *stmt.Throw:
+		err = e.EditNode(&value.(*stmt.Throw).Expr)
+		return err
+	// php 7 not support break and continue  non-constant operand
+	case *stmt.Break:
+		return nil
+	case *stmt.Continue:
+		return nil
+
 	case *stmt.AltIf:
 	case *stmt.Do:
 	case *stmt.AltWhile:
 	case *stmt.AltElseIf:
 	case *stmt.PropertyList:
-
+		err = e.EditNodes(&value.(*stmt.PropertyList).Properties)
 	case *stmt.Class:
 		return nil
 	case *stmt.Function:
