@@ -52,10 +52,7 @@ func TestPrint(t *testing.T) {
 	// var n node.Node
 	//	n = node.NewNullable(scalar.NewString("123"))
 	//	 p.Print(n)
-	src := `<? if(1){
-}else{
-}
-`
+	src := `<?php echo array("1", "2")[1];`
 	php7parser := php7.NewParser(bytes.NewBufferString(src), "test.php")
 	php7parser.Parse()
 	root := php7parser.GetRootNode()

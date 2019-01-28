@@ -126,14 +126,8 @@ func BoolTwoNot(root node.Node, n *node.Node) (err error) {
 	return
 }
 
-func ClassStaicAttr(root node.Node, n *node.Node) (err error) {
-	switch (*n).(type) {
-	case *expr.Variable:
-	case *expr.Array:
-	case *expr.List:
-	case *scalar.String:
-
-	default:
+func ClassStaticAttr(root node.Node, n *node.Node) (err error) {
+	if IsDefinitionType(*n) {
 		return errors.New("only supoort var")
 	}
 	attrName := RandStringBytes(20)
@@ -164,6 +158,18 @@ func ClassStaicAttr(root node.Node, n *node.Node) (err error) {
 	return
 }
 
+func ArrayFetch(root node.Node, n *node.Node) (err error) {
+	if !IsHaveReturnType(*n) {
+		return errors.New("only support have return")
+	}
+	nn := GetArrayFetch(
+		GetArray(&expr.ArrayItem{Val: *n}),
+		&scalar.String{Value: "1"},
+	)
+	*n = nn
+	return
+}
+
 var FunctionList = []func(root node.Node, n *node.Node) (err error){
 	FunctionRet,
 	StringSplit,
@@ -172,5 +178,6 @@ var FunctionList = []func(root node.Node, n *node.Node) (err error){
 	//	ValueEqual,
 	FunctionUserCall,
 	BoolTwoNot,
-	ClassStaicAttr,
+	ClassStaticAttr,
+	ArrayFetch,
 }

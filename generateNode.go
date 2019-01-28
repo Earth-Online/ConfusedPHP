@@ -103,3 +103,18 @@ func GetIfTrue(stmts node.Node, elseif []node.Node, Else node.Node) (n node.Node
 	}
 	return
 }
+
+func GetArrayFetch(array node.Node, fetch node.Node) (n node.Node) {
+	n = &expr.ArrayDimFetch{
+		Variable: array,
+		Dim:      fetch,
+	}
+	return
+}
+
+func GetArray(value ...node.Node) (n node.Node) {
+	n = &expr.Array{
+		Items: value,
+	}
+	return
+}

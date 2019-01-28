@@ -2,6 +2,7 @@ package confusedPHP
 
 import (
 	"github.com/z7zmey/php-parser/node"
+	"github.com/z7zmey/php-parser/node/expr"
 	"github.com/z7zmey/php-parser/node/scalar"
 	"github.com/z7zmey/php-parser/node/stmt"
 	"math/rand"
@@ -40,6 +41,34 @@ var DefinitionType = []reflect.Type{
 	reflect.TypeOf(&stmt.Trait{}),
 }
 
+var ProcessControlType = []reflect.Type{
+	reflect.TypeOf(&stmt.If{}),
+	reflect.TypeOf(&stmt.Else{}),
+	reflect.TypeOf(&stmt.ElseIf{}),
+	reflect.TypeOf(&stmt.Switch{}),
+	reflect.TypeOf(&stmt.Case{}),
+	reflect.TypeOf(&stmt.Do{}),
+	reflect.TypeOf(&stmt.While{}),
+	reflect.TypeOf(&stmt.CaseList{}),
+}
+
+var HaveReturnType = append([]reflect.Type{
+	reflect.TypeOf(&expr.FunctionCall{}),
+	reflect.TypeOf(&expr.ShortArray{}),
+	reflect.TypeOf(&expr.Array{}),
+	reflect.TypeOf(&expr.Variable{}),
+	reflect.TypeOf(&expr.InstanceOf{}),
+	reflect.TypeOf(&expr.FunctionCall{}),
+	reflect.TypeOf(&expr.Eval{}),
+	reflect.TypeOf(&expr.List{}),
+	reflect.TypeOf(&expr.Empty{}),
+	reflect.TypeOf(&expr.Isset{}),
+	reflect.TypeOf(&expr.ShellExec{}),
+	reflect.TypeOf(&expr.Print{}),
+	reflect.TypeOf(&expr.StaticPropertyFetch{}),
+	reflect.TypeOf(&expr.StaticCall{}),
+}, ConstantType...)
+
 var ConstantType = []reflect.Type{
 	reflect.TypeOf(&scalar.String{}),
 	reflect.TypeOf(&scalar.Lnumber{}),
@@ -51,6 +80,15 @@ var ConstantType = []reflect.Type{
 // Determine if node  is  sDefinitionType
 func IsDefinitionType(n node.Node) bool {
 	for _, val := range DefinitionType {
+		if val == reflect.TypeOf(n) {
+			return true
+		}
+	}
+	return false
+}
+
+func IsHaveReturnType(n node.Node) bool {
+	for _, val := range HaveReturnType {
 		if val == reflect.TypeOf(n) {
 			return true
 		}
