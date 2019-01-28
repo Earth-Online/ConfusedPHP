@@ -118,3 +118,16 @@ func GetArray(value ...node.Node) (n node.Node) {
 	}
 	return
 }
+
+func GetStaticCall(className string, funcName string, args node.ArgumentList) (n node.Node) {
+	n = &expr.StaticCall{
+		Class: &name.Name{
+			Parts: []node.Node{
+				&name.NamePart{Value: className},
+			},
+		},
+		Call:         &node.Identifier{Value: funcName},
+		ArgumentList: &args,
+	}
+	return
+}

@@ -13,8 +13,8 @@ import (
 )
 
 func FunctionRet(root node.Node, n *node.Node) (err error) {
-	if IsDefinitionType(*n) {
-		return errors.New("not support Definition Type ")
+	if !IsHaveReturnType(*n) {
+		return errors.New("only support ret type ")
 	}
 	rootNode := root.(*node.Root)
 	name := RandStringBytes(5)
@@ -36,8 +36,8 @@ func StringSplit(root node.Node, n *node.Node) (err error) {
 		return
 	}
 	split := len(value) / 2
-	string1 := scalar.NewString(fmt.Sprintf("%s\"", value[:split]))
-	string2 := scalar.NewString(fmt.Sprintf("\"%s", value[split:]))
+	string1 := scalar.NewString(fmt.Sprintf("\"%s\"", value[:split]))
+	string2 := scalar.NewString(fmt.Sprintf("\"%s\"", value[split:]))
 	t := binary.NewPlus(string1, string2)
 	*n = t
 	return
@@ -100,7 +100,7 @@ func ValueEqual(root node.Node, n *node.Node) (err error) {
 func FunctionUserCall(root node.Node, n *node.Node) (err error) {
 	nn, ok := (*n).(*expr.FunctionCall)
 	if !ok {
-		return errors.New("")
+		return errors.New("only support function call")
 	}
 	var nameNode node.Node
 	nameNode = node.NewIdentifier("call_user_func")
@@ -110,29 +110,70 @@ func FunctionUserCall(root node.Node, n *node.Node) (err error) {
 }
 
 func BoolTwoNot(root node.Node, n *node.Node) (err error) {
+	if !IsRetBoolType(*n) {
+		return errors.New("only support bool")
+	}
 	var nn node.Node
-	switch (*n).(type) {
-	case *expr.BitwiseNot:
-		nn = &expr.BitwiseNot{
-			Expr: &expr.BitwiseNot{
-				Expr: *n,
-			},
-		}
-	case *expr.BooleanNot:
-		nn = &expr.BooleanNot{
-			Expr: &expr.BooleanNot{
-				Expr: *n,
-			},
-		}
-	default:
-		return errors.New("")
+	nn = &expr.BooleanNot{
+		Expr: &expr.BooleanNot{
+			Expr: *n,
+		},
 	}
 	*n = nn
 	return
 }
 
+// TODO
+func IfTrue(root node.Node, n *node.Node) (err error) {
+	if !IsHaveReturnType(*n) {
+		return errors.New("only support have return type")
+	}
+	nn := &stmt.If{
+		Cond: *n,
+	}
+	*n = nn
+	return
+}
+
+func ClassStaticMethod(root node.Node, n *node.Node) (err error) {
+	if !IsHaveReturnType(*n) {
+		return errors.New("only support have return type")
+	}
+	className := RandStringBytes(5)
+	funcName := RandStringBytes(5)
+	method := &stmt.ClassMethod{
+		ReturnsRef:    false,
+		PhpDocComment: "",
+		MethodName: &node.Identifier{
+			Value: funcName,
+		},
+		Modifiers: []node.Node{
+			&node.Identifier{
+				Value: "public",
+			},
+			&node.Identifier{
+				Value: "static",
+			},
+		},
+		Stmt: &stmt.StmtList{
+			Stmts: []node.Node{
+				&stmt.Return{
+					Expr: *n,
+				},
+			},
+		},
+	}
+	class := GetClass(className, []node.Node{method})
+
+	rootNode := root.(*node.Root)
+	rootNode.Stmts = append([]node.Node{class}, rootNode.Stmts...)
+
+	*n = GetStaticCall(className, funcName, node.ArgumentList{})
+	return
+}
+
 func ClassStaticAttr(root node.Node, n *node.Node) (err error) {
-	if IsDefinitionType(*n) {
+	if !IsValueType(*n) {
 		return errors.New("only supoort var")
 	}
 	attrName := RandStringBytes(20)
@@ -183,7 +224,6 @@ func GzCompress(root node.Node, n *node.Node) (err error) {
 	if err != nil {
 		return
 	}
-
 	compress, err := ZlibCompress([]byte(value))
 	if err != nil {
 		return
@@ -207,6 +247,7 @@ var FunctionList = []func(root node.Node, n *node.Node) (err error){
 	FunctionUserCall,
 	BoolTwoNot,
 	ClassStaticAttr,
+	ClassStaticMethod,
 	ArrayFetch,
 	GzCompress,
 }
