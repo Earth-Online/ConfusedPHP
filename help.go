@@ -75,43 +75,62 @@ var StringType = []reflect.Type{
 	reflect.TypeOf(&scalar.Heredoc{}),
 }
 
+var BoolType = []reflect.Type{
+	reflect.TypeOf(&expr.BooleanNot{}),
+	reflect.TypeOf(&expr.BitwiseNot{}),
+}
+var RetBoolType = append([]reflect.Type{
+	reflect.TypeOf(&expr.Isset{}),
+	reflect.TypeOf(&expr.Empty{}),
+}, BoolType...)
+
 var ConstantType = append(StringType, NumType...)
+
+var ListType = []reflect.Type{
+	reflect.TypeOf(&expr.List{}),
+	reflect.TypeOf(&expr.ShortList{}),
+	reflect.TypeOf(&expr.Array{}),
+	reflect.TypeOf(&expr.ShortArray{}),
+}
+
+var ValueType = append(ConstantType, ListType...)
+
+func NodeIsType(n node.Node, nodeType []reflect.Type) bool {
+	for _, val := range nodeType {
+		if val == reflect.TypeOf(n) {
+			return true
+		}
+	}
+	return false
+}
 
 // Determine if node  is  sDefinitionType
 func IsDefinitionType(n node.Node) bool {
-	for _, val := range DefinitionType {
-		if val == reflect.TypeOf(n) {
-			return true
-		}
-	}
-	return false
+	return NodeIsType(n, DefinitionType)
 }
 
 func IsHaveReturnType(n node.Node) bool {
-	for _, val := range HaveReturnType {
-		if val == reflect.TypeOf(n) {
-			return true
-		}
-	}
-	return false
+	return NodeIsType(n, HaveReturnType)
 }
 
 func IsConstantType(n node.Node) bool {
-	for _, val := range ConstantType {
-		if val == reflect.TypeOf(n) {
-			return true
-		}
-	}
-	return false
+	return NodeIsType(n, ConstantType)
+}
+
+func IsProcessControlType(n node.Node) bool {
+	return NodeIsType(n, ProcessControlType)
 }
 
 func IsStringType(n node.Node) bool {
-	for _, val := range StringType {
-		if val == reflect.TypeOf(n) {
-			return true
-		}
-	}
-	return false
+	return NodeIsType(n, StringType)
+}
+
+func IsValueType(n node.Node) bool {
+	return NodeIsType(n, ValueType)
+}
+
+func IsRetBoolType(n node.Node) bool {
+	return NodeIsType(n, RetBoolType)
 }
 
 func IsFullyStringType(n node.Node) bool {

@@ -37,7 +37,6 @@ func TestIsDefinitionType(t *testing.T) {
 	if !confusedPHP.IsDefinitionType(trait) {
 		t.Error("trait check error")
 	}
-
 }
 
 func TestIsConstantType(t *testing.T) {
