@@ -13,7 +13,7 @@ import (
 )
 
 func FunctionRet(root node.Node, n *node.Node) (err error) {
-	if IsDefinitionType(n) {
+	if IsDefinitionType(*n) {
 		return errors.New("not support Definition Type ")
 	}
 	rootNode := root.(*node.Root)

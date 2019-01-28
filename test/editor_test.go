@@ -27,7 +27,7 @@ func TestNewEditor(t *testing.T) {
 func TestEdit(t *testing.T) {
 	rand.Seed(time.Now().UTC().UnixNano())
 	n := shell.GetRoot()
-	editor := confusedPHP.NewEditor(&n)
+	var editor = confusedPHP.NewEditor(&n)
 	err := editor.Edit()
 	err = editor.Edit()
 	err = editor.Edit()
@@ -52,7 +52,9 @@ func TestPrint(t *testing.T) {
 	// var n node.Node
 	//	n = node.NewNullable(scalar.NewString("123"))
 	//	 p.Print(n)
-	src := `<? Foo::$my_static;
+	src := `<? if(1){
+}else{
+}
 `
 	php7parser := php7.NewParser(bytes.NewBufferString(src), "test.php")
 	php7parser.Parse()

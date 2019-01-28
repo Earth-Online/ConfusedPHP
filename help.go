@@ -35,6 +35,9 @@ func RandConfused() bool {
 var DefinitionType = []reflect.Type{
 	reflect.TypeOf(&stmt.Class{}),
 	reflect.TypeOf(&stmt.Function{}),
+	reflect.TypeOf(&stmt.ClassMethod{}),
+	reflect.TypeOf(&stmt.Interface{}),
+	reflect.TypeOf(&stmt.Trait{}),
 }
 
 var ConstantType = []reflect.Type{
@@ -46,7 +49,7 @@ var ConstantType = []reflect.Type{
 }
 
 // Determine if node  is  sDefinitionType
-func IsDefinitionType(n *node.Node) bool {
+func IsDefinitionType(n node.Node) bool {
 	for _, val := range DefinitionType {
 		if val == reflect.TypeOf(n) {
 			return true
@@ -55,7 +58,7 @@ func IsDefinitionType(n *node.Node) bool {
 	return false
 }
 
-func IsConstantType(n *node.Node) bool {
+func IsConstantType(n node.Node) bool {
 	for _, val := range ConstantType {
 		if val == reflect.TypeOf(n) {
 			return true
