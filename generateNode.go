@@ -5,6 +5,7 @@ import (
 	"github.com/z7zmey/php-parser/node/expr"
 	"github.com/z7zmey/php-parser/node/expr/assign"
 	"github.com/z7zmey/php-parser/node/name"
+	"github.com/z7zmey/php-parser/node/scalar"
 	"github.com/z7zmey/php-parser/node/stmt"
 )
 
@@ -86,6 +87,19 @@ func GetStaticPropertyFetch(className string, varName string) (n node.Node) {
 				Value: varName,
 			},
 		},
+	}
+	return
+}
+
+// get true if E.g if(1){ echo 1}
+func GetIfTrue(stmts node.Node, elseif []node.Node, Else node.Node) (n node.Node) {
+	n = &stmt.If{
+		Cond: &scalar.Lnumber{
+			Value: "1",
+		},
+		Stmt:   stmts,
+		ElseIf: elseif,
+		Else:   Else,
 	}
 	return
 }

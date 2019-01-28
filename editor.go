@@ -179,9 +179,37 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 	case *scalar.MagicConstant:
 		return nil
 	case *scalar.Encapsed:
+
+	case *stmt.If:
+		err = e.EditNode(&value.(*stmt.If).Cond)
+		if err != nil {
+			return err
+		}
+		err = e.EditNode(&value.(*stmt.If).Stmt)
+		if err != nil {
+			return err
+		}
+		err = e.EditNodes(&value.(*stmt.If).ElseIf)
+		if err != nil {
+			return err
+		}
+		return e.EditNode(&value.(*stmt.If).Else)
+
+	case *stmt.ElseIf:
+		err = e.EditNode(&value.(*stmt.ElseIf).Cond)
+		if err != nil {
+			return err
+		}
+		return e.EditNode(&value.(*stmt.ElseIf).Stmt)
+	case *stmt.Else:
+		return e.EditNode(&value.(*stmt.Else).Stmt)
+
 	case *stmt.Global:
+		return nil
 	case *stmt.Use:
+		return nil
 	case *stmt.UseList:
+		return nil
 	case *stmt.Finally:
 		return nil
 

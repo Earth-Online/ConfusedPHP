@@ -2,6 +2,7 @@ package confusedPHP
 
 import (
 	"github.com/z7zmey/php-parser/node"
+	"github.com/z7zmey/php-parser/node/scalar"
 	"github.com/z7zmey/php-parser/node/stmt"
 	"math/rand"
 	"reflect"
@@ -33,9 +34,26 @@ var DefinitionType = []reflect.Type{
 	reflect.TypeOf(&stmt.Function{}),
 }
 
+var ConstantType = []reflect.Type{
+	reflect.TypeOf(&scalar.String{}),
+	reflect.TypeOf(&scalar.Lnumber{}),
+	reflect.TypeOf(&scalar.Dnumber{}),
+	reflect.TypeOf(&scalar.Encapsed{}),
+	reflect.TypeOf(&scalar.Heredoc{}),
+}
+
 // Determine if node  is  sDefinitionType
 func IsDefinitionType(n *node.Node) bool {
 	for _, val := range DefinitionType {
+		if val == reflect.TypeOf(n) {
+			return true
+		}
+	}
+	return false
+}
+
+func IsConstantType(n *node.Node) bool {
+	for _, val := range ConstantType {
 		if val == reflect.TypeOf(n) {
 			return true
 		}
