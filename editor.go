@@ -255,14 +255,36 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 	case *stmt.AltElseIf:
 	case *stmt.PropertyList:
 		err = e.EditNodes(&value.(*stmt.PropertyList).Properties)
-	case *stmt.Class:
+	case *stmt.Interface:
+		nn := value.(*stmt.Interface)
+		nn.PhpDocComment = ""
 		return nil
+
+	case *stmt.Class:
+		nn := value.(*stmt.Class)
+		nn.PhpDocComment = ""
+		return nil
+	case *stmt.ClassMethod:
+		nn := value.(*stmt.ClassMethod)
+		nn.PhpDocComment = ""
+		return nil
+
 	case *stmt.Function:
+		nn := value.(*stmt.Function)
+		nn.PhpDocComment = ""
+		return nil
+
+	case *stmt.Trait:
+		nn := value.(*stmt.Trait)
+		nn.PhpDocComment = ""
 		return nil
 
 		// goto
 	case *stmt.Goto:
+		return nil
 	case *stmt.Label:
+		return nil
+	case *stmt.Declare:
 		return nil
 
 	}
