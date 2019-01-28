@@ -1,6 +1,8 @@
 package confusedPHP
 
 import (
+	"bytes"
+	"compress/zlib"
 	"github.com/z7zmey/php-parser/node"
 	"github.com/z7zmey/php-parser/node/expr"
 	"github.com/z7zmey/php-parser/node/scalar"
@@ -103,4 +105,18 @@ func IsConstantType(n node.Node) bool {
 		}
 	}
 	return false
+}
+
+func ZlibCompress(src []byte) (data string, err error) {
+	var in bytes.Buffer
+	w := zlib.NewWriter(&in)
+	_, err = w.Write(src)
+	if err != nil {
+		return
+	}
+	err = w.Close()
+	if err != nil {
+		return
+	}
+	return in.String(), nil
 }

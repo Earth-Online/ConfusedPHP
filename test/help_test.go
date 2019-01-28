@@ -56,3 +56,13 @@ func TestIsConstantType(t *testing.T) {
 	}
 
 }
+
+func TestZlibCompress(t *testing.T) {
+	test := []byte("123456")
+	data, err := confusedPHP.ZlibCompress(test)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Log(data)
+}

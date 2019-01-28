@@ -170,6 +170,24 @@ func ArrayFetch(root node.Node, n *node.Node) (err error) {
 	return
 }
 
+func GzCompress(root node.Node, n *node.Node) (err error) {
+	//nn := GetFunctionCall()
+	nn, ok := (*n).(*scalar.String)
+	if !ok {
+		return errors.New("only support string")
+	}
+	compress, err := ZlibCompress([]byte(nn.Value))
+	if err != nil {
+		return
+	}
+	nn.Value = compress
+	var nameNode node.Node = node.NewIdentifier("base64")
+	var args node.Node = GetFunctionArg(nn)
+	nnn := GetFunctionCall(nameNode, args.(*node.ArgumentList))
+	*n = nnn
+	return
+}
+
 var FunctionList = []func(root node.Node, n *node.Node) (err error){
 	FunctionRet,
 	StringSplit,
@@ -180,4 +198,5 @@ var FunctionList = []func(root node.Node, n *node.Node) (err error){
 	BoolTwoNot,
 	ClassStaticAttr,
 	ArrayFetch,
+	GzCompress,
 }
