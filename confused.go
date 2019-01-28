@@ -28,11 +28,13 @@ func FunctionRet(root node.Node, n *node.Node) (err error) {
 }
 
 func StringSplit(root node.Node, n *node.Node) (err error) {
-	nn, ok := (*n).(*scalar.String)
-	if !ok {
-		return errors.New("")
+	if !IsFullyStringType(*n) {
+		return errors.New("only support string")
 	}
-	value := nn.Value
+	value, err := GetStingTypeValue(*n)
+	if err != nil {
+		return
+	}
 	split := len(value) / 2
 	string1 := scalar.NewString(fmt.Sprintf("%s\"", value[:split]))
 	string2 := scalar.NewString(fmt.Sprintf("\"%s", value[split:]))
@@ -42,11 +44,14 @@ func StringSplit(root node.Node, n *node.Node) (err error) {
 }
 
 func StringBase64(root node.Node, n *node.Node) (err error) {
-	nn, ok := (*n).(*scalar.String)
-	if !ok {
-		return errors.New("")
+	if !IsFullyStringType(*n) {
+		return errors.New("only support string")
 	}
-	value := fmt.Sprintf("\"%s\"", base64.StdEncoding.EncodeToString([]byte(nn.Value)))
+	value, err := GetStingTypeValue(*n)
+	if err != nil {
+		return
+	}
+	value = fmt.Sprintf("\"%s\"", base64.StdEncoding.EncodeToString([]byte(value)))
 	var nameNode node.Node
 	nameNode = node.NewIdentifier("base64")
 	args := GetFunctionArg(scalar.NewString(value))
@@ -171,15 +176,21 @@ func ArrayFetch(root node.Node, n *node.Node) (err error) {
 }
 
 func GzCompress(root node.Node, n *node.Node) (err error) {
-	nn, ok := (*n).(*scalar.String)
-	if !ok {
+	if !IsFullyStringType(*n) {
 		return errors.New("only support string")
 	}
-	compress, err := ZlibCompress([]byte(nn.Value))
+	value, err := GetStingTypeValue(*n)
 	if err != nil {
 		return
 	}
-	nn.Value = compress
+
+	compress, err := ZlibCompress([]byte(value))
+	if err != nil {
+		return
+	}
+	nn := &scalar.String{
+		Value: compress,
+	}
 	var nameNode node.Node = node.NewIdentifier("base64")
 	var args = GetFunctionArg(nn)
 	nnn := GetFunctionCall(nameNode, args.(*node.ArgumentList))

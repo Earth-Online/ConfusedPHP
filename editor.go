@@ -168,17 +168,10 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 			return
 		}
 		return e.EditNode(&nn.Dim)
-	//case *scalar.Lnumber:
-	//case *scalar.Dnumber:
-	//	return e.NoEdit(n)
-	// case *scalar.String:
-	//	return e.EditString(&n)
-	// case *scalar.EncapsedStringPart:
-	// case *scalar.Heredoc::
 
+		// php __xxx__
 	case *scalar.MagicConstant:
 		return nil
-	//case *scalar.Encapsed:
 
 	// php if
 	case *stmt.If:
