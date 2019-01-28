@@ -3,13 +3,14 @@ package confusedPHP
 import (
 	"bytes"
 	"compress/zlib"
+	"errors"
+	"fmt"
 	"github.com/z7zmey/php-parser/node"
 	"github.com/z7zmey/php-parser/node/expr"
 	"github.com/z7zmey/php-parser/node/scalar"
 	"github.com/z7zmey/php-parser/node/stmt"
 	"math/rand"
 	"reflect"
-	"time"
 )
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -24,14 +25,6 @@ func RandStringBytes(n uint) string {
 		b[i] = letterBytes[rand.Intn(len(letterBytes))]
 	}
 	return string(b)
-}
-
-func RandConfused() bool {
-	rand.Seed(int64(time.Now().UnixNano()))
-	if rand.Int()%2 == 1 {
-		return true
-	}
-	return false
 }
 
 // php definition E.g function
@@ -71,13 +64,18 @@ var HaveReturnType = append([]reflect.Type{
 	reflect.TypeOf(&expr.StaticCall{}),
 }, ConstantType...)
 
-var ConstantType = []reflect.Type{
-	reflect.TypeOf(&scalar.String{}),
+var NumType = []reflect.Type{
 	reflect.TypeOf(&scalar.Lnumber{}),
 	reflect.TypeOf(&scalar.Dnumber{}),
+}
+
+var StringType = []reflect.Type{
+	reflect.TypeOf(&scalar.String{}),
 	reflect.TypeOf(&scalar.Encapsed{}),
 	reflect.TypeOf(&scalar.Heredoc{}),
 }
+
+var ConstantType = append(StringType, NumType...)
 
 // Determine if node  is  sDefinitionType
 func IsDefinitionType(n node.Node) bool {
@@ -105,6 +103,71 @@ func IsConstantType(n node.Node) bool {
 		}
 	}
 	return false
+}
+
+func IsStringType(n node.Node) bool {
+	for _, val := range StringType {
+		if val == reflect.TypeOf(n) {
+			return true
+		}
+	}
+	return false
+}
+
+func IsFullyStringType(n node.Node) bool {
+	if !IsStringType(n) {
+		return false
+	}
+	switch n.(type) {
+	case *scalar.Heredoc:
+		for _, value := range n.(*scalar.Heredoc).Parts {
+			switch value.(type) {
+			case *expr.Variable:
+				return false
+			}
+		}
+	case *scalar.Encapsed:
+		for _, value := range n.(*scalar.Heredoc).Parts {
+			switch value.(type) {
+			case *expr.Variable:
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func GetStingTypeValue(n node.Node) (str string, err error) {
+	if !IsStringType(n) {
+		return "", errors.New("not string type")
+	}
+	switch n.(type) {
+	case *scalar.String:
+		return n.(*scalar.String).Value, nil
+	case *scalar.Heredoc:
+		tmp := ""
+		for _, value := range n.(*scalar.Heredoc).Parts {
+			switch value.(type) {
+			case *VarStr:
+				tmp = tmp + value.(*VarStr).String()
+			case *scalar.EncapsedStringPart:
+				tmp = fmt.Sprintf("%s%s", tmp, value.(*scalar.EncapsedStringPart).Value)
+			}
+		}
+		return tmp, nil
+	case *scalar.Encapsed:
+		tmp := ""
+		for _, value := range n.(*scalar.Encapsed).Parts {
+			switch value.(type) {
+			case *VarStr:
+				tmp = tmp + value.(*VarStr).String()
+			case *scalar.EncapsedStringPart:
+				tmp = fmt.Sprintf("%s%s", tmp, value.(*scalar.EncapsedStringPart).Value)
+			}
+		}
+		return tmp, nil
+	}
+	return
 }
 
 func ZlibCompress(src []byte) (data string, err error) {

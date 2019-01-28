@@ -54,7 +54,6 @@ func TestIsConstantType(t *testing.T) {
 	if !confusedPHP.IsConstantType(Float) {
 		t.Error("float constant check error")
 	}
-
 }
 
 func TestZlibCompress(t *testing.T) {
