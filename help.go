@@ -12,7 +12,10 @@ import (
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 // get random string
-func RandStringBytes(n int) string {
+func RandStringBytes(n uint) string {
+	if n < 0 {
+		return ""
+	}
 	b := make([]byte, n)
 	for i := range b {
 		b[i] = letterBytes[rand.Intn(len(letterBytes))]
