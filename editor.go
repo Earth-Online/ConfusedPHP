@@ -178,8 +178,9 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 
 	case *scalar.MagicConstant:
 		return nil
-	case *scalar.Encapsed:
+	//case *scalar.Encapsed:
 
+	// php if
 	case *stmt.If:
 		err = e.EditNode(&value.(*stmt.If).Cond)
 		if err != nil {
@@ -194,7 +195,6 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 			return err
 		}
 		return e.EditNode(&value.(*stmt.If).Else)
-
 	case *stmt.ElseIf:
 		err = e.EditNode(&value.(*stmt.ElseIf).Cond)
 		if err != nil {
@@ -203,6 +203,24 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 		return e.EditNode(&value.(*stmt.ElseIf).Stmt)
 	case *stmt.Else:
 		return e.EditNode(&value.(*stmt.Else).Stmt)
+
+	// php switch
+	case *stmt.Switch:
+		err = e.EditNode(&value.(*stmt.Switch).Cond)
+		if err != nil {
+			return err
+		}
+		var nn node.Node = value.(*stmt.Switch).CaseList
+		err = e.EditNode(&nn)
+	case *stmt.CaseList:
+		err = e.EditNodes(&value.(*stmt.CaseList).Cases)
+		return
+	case *stmt.Case:
+		err = e.EditNode(&value.(*stmt.Case).Cond)
+		if err != nil {
+			return
+		}
+		err = e.EditNodes(&value.(*stmt.Case).Stmts)
 
 	case *stmt.Global:
 		return nil
@@ -219,10 +237,16 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 			return
 		}
 		return e.EditNode(&value.(*stmt.While).Stmt)
-
+	case *stmt.Do:
+		err = e.EditNode(&value.(*stmt.Do).Cond)
+		if err != nil {
+			return
+		}
+		return e.EditNode(&value.(*stmt.Do).Stmt)
 	case *stmt.Expression:
 		return e.EditNode(&value.(*stmt.Expression).Expr)
 	case *stmt.Echo:
+		err = e.EditNodes(&value.(*stmt.Echo).Exprs)
 	case *stmt.Nop:
 		return nil
 
@@ -250,7 +274,6 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 		return nil
 
 	case *stmt.AltIf:
-	case *stmt.Do:
 	case *stmt.AltWhile:
 	case *stmt.AltElseIf:
 	case *stmt.PropertyList:
