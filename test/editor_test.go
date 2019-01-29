@@ -52,10 +52,12 @@ func TestPrint(t *testing.T) {
 	// var n node.Node
 	//	n = node.NewNullable(scalar.NewString("123"))
 	//	 p.Print(n)
-	src := `<? <<<LBL
-test $var
-LBL;
-`
+	src := `<?php
+class Foo {
+    public static function aStaticMethod() {
+        // ...
+    }
+}`
 	php7parser := php7.NewParser(bytes.NewBufferString(src), "test.php")
 	php7parser.Parse()
 	root := php7parser.GetRootNode()

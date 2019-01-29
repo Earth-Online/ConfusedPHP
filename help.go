@@ -36,7 +36,7 @@ var DefinitionType = []reflect.Type{
 	reflect.TypeOf(&stmt.Trait{}),
 }
 
-var ProcessControlType = []reflect.Type{
+var ProcessControlType = append([]reflect.Type{
 	reflect.TypeOf(&stmt.If{}),
 	reflect.TypeOf(&stmt.Else{}),
 	reflect.TypeOf(&stmt.ElseIf{}),
@@ -45,6 +45,18 @@ var ProcessControlType = []reflect.Type{
 	reflect.TypeOf(&stmt.Do{}),
 	reflect.TypeOf(&stmt.While{}),
 	reflect.TypeOf(&stmt.CaseList{}),
+	reflect.TypeOf(&stmt.For{}),
+	reflect.TypeOf(&stmt.Foreach{}),
+}, AltProcessControlType...)
+
+var AltProcessControlType = []reflect.Type{
+	reflect.TypeOf(&stmt.AltIf{}),
+	reflect.TypeOf(&stmt.AltElseIf{}),
+	reflect.TypeOf(&stmt.AltElse{}),
+	reflect.TypeOf(&stmt.AltSwitch{}),
+	reflect.TypeOf(&stmt.AltFor{}),
+	reflect.TypeOf(&stmt.AltForeach{}),
+	reflect.TypeOf(&stmt.AltWhile{}),
 }
 
 var HaveReturnType = append([]reflect.Type{

@@ -215,6 +215,11 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 		}
 		err = e.EditNodes(&value.(*stmt.Case).Stmts)
 
+	case *stmt.For:
+		return nil
+	case *stmt.Foreach:
+		return nil
+
 	case *stmt.Global:
 		return nil
 	case *stmt.Use:
@@ -267,8 +272,18 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 		return nil
 
 	case *stmt.AltIf:
-	case *stmt.AltWhile:
+		return nil
 	case *stmt.AltElseIf:
+		return nil
+	case *stmt.AltElse:
+		return nil
+	case *stmt.AltWhile:
+		return nil
+	case *stmt.AltFor:
+		return
+	case *stmt.AltSwitch:
+		return
+
 	case *stmt.PropertyList:
 		err = e.EditNodes(&value.(*stmt.PropertyList).Properties)
 	case *stmt.Interface:
@@ -283,12 +298,14 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 	case *stmt.ClassMethod:
 		nn := value.(*stmt.ClassMethod)
 		nn.PhpDocComment = ""
+		err = e.EditNode(&nn.Stmt)
 		return nil
 
 	case *stmt.Function:
 		nn := value.(*stmt.Function)
 		nn.PhpDocComment = ""
-		return nil
+		err = e.EditNodes(&nn.Stmts)
+		return
 
 	case *stmt.Trait:
 		nn := value.(*stmt.Trait)

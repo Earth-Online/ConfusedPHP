@@ -3,8 +3,10 @@ package test
 import (
 	"github.com/blue-bird1/ConfusedPHP"
 	"github.com/z7zmey/php-parser/node"
+	"github.com/z7zmey/php-parser/node/expr"
 	"github.com/z7zmey/php-parser/node/scalar"
 	"github.com/z7zmey/php-parser/node/stmt"
+	"reflect"
 	"testing"
 )
 
@@ -13,6 +15,21 @@ func TestRandString(t *testing.T) {
 	if len(ret) != 5 {
 		t.Error("Error generating  string")
 	}
+}
+
+func TestNodeIsType(t *testing.T) {
+	testType := []reflect.Type{
+		reflect.TypeOf(&scalar.String{}),
+	}
+	testString := scalar.NewString("test")
+	if !confusedPHP.NodeIsType(testString, testType) {
+		t.Error("isType check error")
+	}
+	testInt := scalar.NewDnumber("1")
+	if confusedPHP.NodeIsType(testInt, testType) {
+		t.Error("isType check error")
+	}
+
 }
 
 func TestIsDefinitionType(t *testing.T) {
@@ -63,4 +80,20 @@ func TestZlibCompress(t *testing.T) {
 		return
 	}
 	t.Log(data)
+}
+
+func TestIsFullyStringType(t *testing.T) {
+	testString := scalar.NewString("test")
+	if !confusedPHP.IsFullyStringType(testString) {
+		t.Error()
+	}
+	testHereDoc := scalar.NewHeredoc("test", []node.Node{scalar.NewEncapsedStringPart("test")})
+	if !confusedPHP.IsFullyStringType(testHereDoc) {
+		t.Error()
+	}
+	testHereDoc = scalar.NewHeredoc("test", []node.Node{expr.NewVariable(node.NewIdentifier("test"))})
+	if confusedPHP.IsFullyStringType(testHereDoc) {
+		t.Error()
+	}
+
 }
