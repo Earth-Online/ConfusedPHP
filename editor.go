@@ -205,6 +205,7 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 		}
 		var nn node.Node = value.(*stmt.Switch).CaseList
 		err = e.EditNode(&nn)
+		return
 	case *stmt.CaseList:
 		err = e.EditNodes(&value.(*stmt.CaseList).Cases)
 		return
@@ -216,9 +217,11 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 		err = e.EditNodes(&value.(*stmt.Case).Stmts)
 
 	case *stmt.For:
+		err = e.EditNode(&value.(*stmt.For).Stmt)
 		return nil
 	case *stmt.Foreach:
-		return nil
+		err = e.EditNode(&value.(*stmt.Foreach).Expr)
+		return
 
 	case *stmt.Global:
 		return nil
@@ -272,16 +275,46 @@ func (e *Editor) EditNode(n *node.Node) (err error) {
 		return nil
 
 	case *stmt.AltIf:
-		return nil
+		err = e.EditNode(&value.(*stmt.AltIf).Cond)
+		if err != nil {
+			return err
+		}
+		err = e.EditNode(&value.(*stmt.AltIf).Stmt)
+		if err != nil {
+			return err
+		}
+		err = e.EditNodes(&value.(*stmt.AltIf).ElseIf)
+		if err != nil {
+			return err
+		}
+		return e.EditNode(&value.(*stmt.AltIf).Else)
 	case *stmt.AltElseIf:
-		return nil
+		err = e.EditNode(&value.(*stmt.AltElseIf).Cond)
+		if err != nil {
+			return err
+		}
+		return e.EditNode(&value.(*stmt.AltElseIf).Stmt)
 	case *stmt.AltElse:
-		return nil
+		return e.EditNode(&value.(*stmt.AltElse).Stmt)
 	case *stmt.AltWhile:
-		return nil
+		err = e.EditNode(&value.(*stmt.AltWhile).Cond)
+		if err != nil {
+			return
+		}
+		return e.EditNode(&value.(*stmt.AltWhile).Stmt)
 	case *stmt.AltFor:
-		return
+		err = e.EditNode(&value.(*stmt.AltFor).Stmt)
+		return nil
 	case *stmt.AltSwitch:
+		err = e.EditNode(&value.(*stmt.AltSwitch).Cond)
+		if err != nil {
+			return err
+		}
+		var nn node.Node = value.(*stmt.AltSwitch).CaseList
+		err = e.EditNode(&nn)
+		return
+	case *stmt.AltForeach:
+		err = e.EditNode(&value.(*stmt.AltForeach).Expr)
 		return
 
 	case *stmt.PropertyList:
