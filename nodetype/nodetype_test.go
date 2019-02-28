@@ -9,6 +9,11 @@ import (
 	"testing"
 )
 
+const TESTStr = "test"
+
+var str = &scalar.String{Value: TESTStr}
+var root = &node.Root{}
+
 func TestNodeIsType(t *testing.T) {
 	testType := []reflect.Type{
 		reflect.TypeOf(&scalar.String{}),
@@ -69,5 +74,33 @@ func TestIsBoolType(t *testing.T) {
 	var bitBool = &expr.BitwiseNot{}
 	if !IsBoolType(not) || !IsBoolType(bitBool) {
 		t.Error("error bool type check")
+	}
+}
+
+func TestNodeIsInterface(t *testing.T) {
+	haveI := NodeIsInterface("I")
+	ok, _ := haveI(struct {
+		I string
+	}{I: TESTStr})
+	if !ok {
+		t.Error("not check have value")
+	}
+	ok, _ = haveI(*str)
+	if ok {
+		t.Error("not check have value")
+	}
+}
+
+func TestIsHaveValueType(t *testing.T) {
+	ok, value := IsHaveValueType(*str)
+	if !ok {
+		t.Error("not check have value")
+	}
+	if value != TESTStr {
+		t.Error("error value")
+	}
+	ok, _ = IsHaveValueType(*root)
+	if ok {
+		t.Error("not check have value")
 	}
 }

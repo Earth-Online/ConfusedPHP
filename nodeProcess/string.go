@@ -14,12 +14,12 @@ func NewStringPrecess(name string, f func(n string) ([]node.Node, node.Node)) *S
 	precess := &StringPrecess{
 		BasePrecess: BasePrecess{
 			name: name,
+			precess: func(n *node.Node) (append []node.Node, replace node.Node) {
+				s := GetString(n)
+				return f(s)
+			},
 		},
 	}
-	precess.SetPrecess(func(n *node.Node) ([]node.Node, node.Node) {
-		s := precess.GetString(n)
-		return f(s)
-	})
 	return precess
 }
 
@@ -27,7 +27,7 @@ func (s StringPrecess) Check(n *node.Node, preNode *node.Node) bool {
 	return nodetype.IsStringType(*n)
 }
 
-func (s StringPrecess) GetString(n *node.Node) string {
+func GetString(n *node.Node) string {
 	str, _ := varProcess.GetStingTypeValue(*n)
 	return str
 }

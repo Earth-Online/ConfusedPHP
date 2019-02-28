@@ -1,4 +1,4 @@
-package confusedPHP
+package phpread
 
 import (
 	"github.com/z7zmey/php-parser/node"
