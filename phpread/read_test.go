@@ -1,4 +1,4 @@
-package confusedPHP
+package phpread
 
 import "testing"
 

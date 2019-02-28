@@ -11,11 +11,13 @@ type Base64Editor struct {
 	BaseEditor
 }
 
-func (b *Base64Editor) Edit() error {
-	return nil
+func NewBase64Editor(baseEditor BaseEditor) *Base64Editor {
+	c := &Base64Editor{BaseEditor: baseEditor}
+	c.editorNode = c.EditNodes
+	return c
 }
 
-func (b *Base64Editor) EditNode(n node.Node) error {
+func (b *Base64Editor) EditNodes(n node.Node) error {
 	if nodetype.IsStringType(n) {
 		return b.confuse(n, obfuscator.Base64Obfuscator)
 	}

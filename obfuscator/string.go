@@ -9,7 +9,7 @@ import (
 	"github.com/z7zmey/php-parser/node/scalar"
 )
 
-var Base64Obfuscator = nodeProcess.NewStringPrecess("base54", func(n string) (append []node.Node, cur node.Node) {
+var Base64Obfuscator = nodeProcess.NewStringPrecess("base64", func(n string) (append []node.Node, cur node.Node) {
 	value := fmt.Sprintf("\"%s\"", base64.StdEncoding.EncodeToString([]byte(n)))
 	var nameNode node.Node
 	nameNode = node.NewIdentifier("base64")
