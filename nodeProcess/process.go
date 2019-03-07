@@ -6,7 +6,8 @@ import (
 
 type NodePrecess interface {
 	Precess(n *node.Node) ([]node.Node, node.Node)
-	Check(n *node.Node, preNode *node.Node) bool
+	// Check(n *node.Node, preNode *node.Node) bool
+	Check(n node.Node, preNode node.Node) bool
 	Name() string
 }
 

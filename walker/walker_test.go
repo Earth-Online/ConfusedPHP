@@ -1,15 +1,13 @@
-package editor
+package walker
 
 import (
-	"github.com/blue-bird1/ConfusedPHP/nodeProcess"
-	"github.com/blue-bird1/ConfusedPHP/obfuscator"
 	"github.com/blue-bird1/ConfusedPHP/phpread"
+	"github.com/z7zmey/php-parser/visitor"
 	"os"
 	"testing"
 )
 
-func TestEditWalker(t *testing.T) {
-	editor := NewEditWalker([]nodeProcess.NodePrecess{obfuscator.Base64Obfuscator})
+func Test(t *testing.T) {
 	testCode := `
 	<?php
 	 		
@@ -27,7 +25,13 @@ $a=1;
 		return
 	}
 	root := parser.GetRootNode()
-	root.Walk(editor)
-	p := NewPrinter(os.Stdout, editor.modifyNode)
-	p.Print(root)
+	nsResolver := visitor.NewNamespaceResolver()
+	root.Walk(nsResolver)
+	dumper := &visitor.Dumper{
+		Writer:     os.Stdout,
+		Indent:     "| ",
+		NsResolver: nsResolver,
+	}
+	root.Walk(dumper)
+	t.Error()
 }
