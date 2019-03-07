@@ -28,6 +28,7 @@ func (e *EditWalker) EnterNode(w walker.Walkable) bool {
 			_, rep := p.Precess(&n)
 			if rep != nil {
 				e.modifyNode[n] = rep
+				break
 			}
 		}
 	}
