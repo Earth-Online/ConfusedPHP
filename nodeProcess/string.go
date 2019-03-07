@@ -29,5 +29,5 @@ func (s StringPrecess) Check(n node.Node, preNode node.Node) bool {
 
 func GetString(n *node.Node) string {
 	str, _ := varProcess.GetStingTypeValue(*n)
-	return str
+	return str[1 : len(str)-1]
 }
