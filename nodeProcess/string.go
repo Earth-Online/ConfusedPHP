@@ -23,8 +23,8 @@ func NewStringPrecess(name string, f func(n string) ([]node.Node, node.Node)) *S
 	return precess
 }
 
-func (s StringPrecess) Check(n *node.Node, preNode *node.Node) bool {
-	return nodetype.IsStringType(*n)
+func (s StringPrecess) Check(n node.Node, preNode node.Node) bool {
+	return nodetype.IsStringType(n)
 }
 
 func GetString(n *node.Node) string {
