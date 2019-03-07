@@ -27,3 +27,18 @@ var StringSplitObfuscator = nodeProcess.NewStringPrecess("string split", func(st
 	t := binary.NewPlus(string1, string2)
 	return []node.Node{}, t
 })
+
+var GzCompressObfuscator = nodeProcess.NewStringPrecess("gzcompress", func(str string) (app []node.Node, cur node.Node) {
+	compress, err := util.ZlibCompress([]byte(str))
+	if err != nil {
+		return
+	}
+
+	nn := &scalar.String{
+		Value: fmt.Sprintf("\"%s\"", compress),
+	}
+	var nameNode node.Node = node.NewIdentifier("gzcompress")
+	var args = util.GetFunctionArg(nn)
+	nnn := util.GetFunctionCall(nameNode, args.(*node.ArgumentList))
+	return nil, nnn
+})
