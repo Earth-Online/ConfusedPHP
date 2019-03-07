@@ -9,8 +9,8 @@ type FunctionCallPrecess struct {
 	BasePrecess
 }
 
-func (f FunctionCallPrecess) Check(n *node.Node, preNode *node.Node) bool {
-	_, ok := (*n).(*expr.FunctionCall)
+func (f FunctionCallPrecess) Check(n node.Node, preNode node.Node) bool {
+	_, ok := (n).(*expr.FunctionCall)
 	return ok
 }
 

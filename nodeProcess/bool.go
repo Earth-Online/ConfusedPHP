@@ -17,6 +17,6 @@ func NewBoolProcess(name string, f func(n *node.Node) ([]node.Node, node.Node)) 
 	return precess
 }
 
-func (b BoolProcess) Check(n *node.Node, preNode *node.Node) bool {
-	return nodetype.IsRetBoolType(*n)
+func (b BoolProcess) Check(n node.Node, preNode node.Node) bool {
+	return nodetype.IsRetBoolType(n)
 }
