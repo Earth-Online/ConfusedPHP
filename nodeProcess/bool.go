@@ -9,11 +9,15 @@ type BoolProcess struct {
 	BasePrecess
 }
 
-func NewBoolProcess(name string, f func(n *node.Node) ([]node.Node, node.Node)) *BoolProcess {
+func NewBoolProcess(name string, f func(n node.Node) ([]node.Node, node.Node)) *BoolProcess {
 	precess := &BoolProcess{
-		BasePrecess: BasePrecess{name: name},
+		BasePrecess: BasePrecess{
+			name: name,
+			precess: func(n node.Node) (append []node.Node, replace node.Node) {
+				return f(n)
+			},
+		},
 	}
-	precess.SetPrecess(f)
 	return precess
 }
 

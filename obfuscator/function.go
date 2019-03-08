@@ -8,8 +8,8 @@ import (
 )
 
 // UserCallObfuscator Conversion function to call_user_func
-var UserCallObfuscator = nodeProcess.NewFunctionCallPrecess("call_user_func", func(n *node.Node) (app []node.Node, cur node.Node) {
-	nn := (*n).(*expr.FunctionCall)
+var UserCallObfuscator = nodeProcess.NewFunctionCallPrecess("call_user_func", func(n node.Node) (app []node.Node, cur node.Node) {
+	nn := (n).(*expr.FunctionCall)
 	var nameNode node.Node
 	nameNode = node.NewIdentifier("call_user_func")
 	call := util.GetFunctionCall(nameNode, util.GetFunctionArg(append([]node.Node{nn.Function}, nn.ArgumentList.Arguments...)...).(*node.ArgumentList))

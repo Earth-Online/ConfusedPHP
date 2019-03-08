@@ -14,8 +14,8 @@ func NewStringPrecess(name string, f func(n string) ([]node.Node, node.Node)) *S
 	precess := &StringPrecess{
 		BasePrecess: BasePrecess{
 			name: name,
-			precess: func(n *node.Node) (append []node.Node, replace node.Node) {
-				s := GetString(n)
+			precess: func(n node.Node) (append []node.Node, replace node.Node) {
+				s := GetString(&n)
 				return f(s)
 			},
 		},

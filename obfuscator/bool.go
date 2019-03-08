@@ -7,11 +7,11 @@ import (
 )
 
 // TwoNotObfuscator add !! at a bool value
-var TwoNotObfuscator = nodeProcess.NewBoolProcess("two not ", func(n *node.Node) (app []node.Node, cur node.Node) {
+var TwoNotObfuscator = nodeProcess.NewBoolProcess("two not ", func(n node.Node) (app []node.Node, cur node.Node) {
 	var nn node.Node
 	nn = &expr.BooleanNot{
 		Expr: &expr.BooleanNot{
-			Expr: *n,
+			Expr: n,
 		},
 	}
 	return []node.Node{}, nn

@@ -43,7 +43,7 @@ var haveReturnType = append([]reflect.Type{
 	reflect.TypeOf(&expr.FunctionCall{}),
 	reflect.TypeOf(&expr.ShortArray{}),
 	reflect.TypeOf(&expr.Array{}),
-	reflect.TypeOf(&expr.Variable{}),
+	//	reflect.TypeOf(&expr.Variable{}),
 	reflect.TypeOf(&expr.InstanceOf{}),
 	reflect.TypeOf(&expr.Eval{}),
 	reflect.TypeOf(&expr.List{}),
