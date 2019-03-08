@@ -8,8 +8,7 @@ import (
 	"reflect"
 )
 
-// php definition E.g function
-var DefinitionType = []reflect.Type{
+var definitionType = []reflect.Type{
 	reflect.TypeOf(&stmt.Class{}),
 	reflect.TypeOf(&stmt.Function{}),
 	reflect.TypeOf(&stmt.ClassMethod{}),
@@ -17,7 +16,7 @@ var DefinitionType = []reflect.Type{
 	reflect.TypeOf(&stmt.Trait{}),
 }
 
-var ProcessControlType = append([]reflect.Type{
+var processControlType = append([]reflect.Type{
 	reflect.TypeOf(&stmt.If{}),
 	reflect.TypeOf(&stmt.Else{}),
 	reflect.TypeOf(&stmt.ElseIf{}),
@@ -28,9 +27,9 @@ var ProcessControlType = append([]reflect.Type{
 	reflect.TypeOf(&stmt.CaseList{}),
 	reflect.TypeOf(&stmt.For{}),
 	reflect.TypeOf(&stmt.Foreach{}),
-}, AltProcessControlType...)
+}, altProcessControlType...)
 
-var AltProcessControlType = []reflect.Type{
+var altProcessControlType = []reflect.Type{
 	reflect.TypeOf(&stmt.AltIf{}),
 	reflect.TypeOf(&stmt.AltElseIf{}),
 	reflect.TypeOf(&stmt.AltElse{}),
@@ -40,11 +39,11 @@ var AltProcessControlType = []reflect.Type{
 	reflect.TypeOf(&stmt.AltWhile{}),
 }
 
-var HaveReturnType = append([]reflect.Type{
+var haveReturnType = append([]reflect.Type{
 	reflect.TypeOf(&expr.FunctionCall{}),
 	reflect.TypeOf(&expr.ShortArray{}),
 	reflect.TypeOf(&expr.Array{}),
-	reflect.TypeOf(&expr.Variable{}),
+	//	reflect.TypeOf(&expr.Variable{}),
 	reflect.TypeOf(&expr.InstanceOf{}),
 	reflect.TypeOf(&expr.Eval{}),
 	reflect.TypeOf(&expr.List{}),
@@ -54,39 +53,40 @@ var HaveReturnType = append([]reflect.Type{
 	reflect.TypeOf(&expr.Print{}),
 	reflect.TypeOf(&expr.StaticPropertyFetch{}),
 	reflect.TypeOf(&expr.StaticCall{}),
-}, ConstantType...)
+}, constantType...)
 
-var NumType = []reflect.Type{
+var numType = []reflect.Type{
 	reflect.TypeOf(&scalar.Lnumber{}),
 	reflect.TypeOf(&scalar.Dnumber{}),
 }
 
-var StringType = []reflect.Type{
+var stringType = []reflect.Type{
 	reflect.TypeOf(&scalar.String{}),
 	reflect.TypeOf(&scalar.Encapsed{}),
 	reflect.TypeOf(&scalar.Heredoc{}),
 }
 
-var BoolType = []reflect.Type{
+var boolType = []reflect.Type{
 	reflect.TypeOf(&expr.BooleanNot{}),
 	reflect.TypeOf(&expr.BitwiseNot{}),
 }
-var RetBoolType = append([]reflect.Type{
+var retBoolType = append([]reflect.Type{
 	reflect.TypeOf(&expr.Isset{}),
 	reflect.TypeOf(&expr.Empty{}),
-}, BoolType...)
+}, boolType...)
 
-var ConstantType = append(StringType, NumType...)
+var constantType = append(stringType, numType...)
 
-var ListType = []reflect.Type{
+var listType = []reflect.Type{
 	reflect.TypeOf(&expr.List{}),
 	reflect.TypeOf(&expr.ShortList{}),
 	reflect.TypeOf(&expr.Array{}),
 	reflect.TypeOf(&expr.ShortArray{}),
 }
 
-var ValueType = append(ConstantType, ListType...)
+var valueType = append(constantType, listType...)
 
+// NodeIsType determine if the node is in the list
 func NodeIsType(nodeType []reflect.Type) func(n node.Node) bool {
 	return func(n node.Node) bool {
 		for _, val := range nodeType {
@@ -98,18 +98,18 @@ func NodeIsType(nodeType []reflect.Type) func(n node.Node) bool {
 	}
 }
 
-var IsDefinitionType = NodeIsType(DefinitionType)
+var IsDefinitionType = NodeIsType(definitionType)
 
-var IsHaveReturnType = NodeIsType(HaveReturnType)
+var IsHaveReturnType = NodeIsType(haveReturnType)
 
-var IsConstantType = NodeIsType(ConstantType)
+var IsConstantType = NodeIsType(constantType)
 
-var IsProcessControlType = NodeIsType(ProcessControlType)
+var IsProcessControlType = NodeIsType(processControlType)
 
-var IsStringType = NodeIsType(StringType)
+var IsStringType = NodeIsType(stringType)
 
-var IsValueType = NodeIsType(ValueType)
+var IsValueType = NodeIsType(valueType)
 
-var IsBoolType = NodeIsType(BoolType)
+var IsBoolType = NodeIsType(boolType)
 
-var IsRetBoolType = NodeIsType(RetBoolType)
+var IsRetBoolType = NodeIsType(retBoolType)

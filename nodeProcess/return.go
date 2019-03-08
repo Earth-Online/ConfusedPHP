@@ -9,11 +9,15 @@ type ReturnProcess struct {
 	BasePrecess
 }
 
-func NewReturnProcess(name string, f func(n *node.Node) ([]node.Node, node.Node)) *ReturnProcess {
+func NewReturnProcess(name string, f func(n node.Node) ([]node.Node, node.Node)) *ReturnProcess {
 	precess := &ReturnProcess{
-		BasePrecess: BasePrecess{name: name},
+		BasePrecess: BasePrecess{
+			name: name,
+			precess: func(n node.Node) (append []node.Node, replace node.Node) {
+				return f(n)
+			},
+		},
 	}
-	precess.SetPrecess(f)
 	return precess
 }
 

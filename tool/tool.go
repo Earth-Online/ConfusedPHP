@@ -6,6 +6,7 @@ import (
 	"github.com/z7zmey/php-parser/printer"
 )
 
+// DeleteBlankLine will code blank line delete
 func DeleteBlankLine(code string) (newCode string, err error) {
 	parser, err := phpread.NewPhpString(code)
 	if err != nil {

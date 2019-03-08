@@ -8,7 +8,7 @@ import (
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-// get random string
+// RandStringBytes get random string
 func RandStringBytes(n uint) string {
 	if n < 0 {
 		return ""
@@ -20,6 +20,7 @@ func RandStringBytes(n uint) string {
 	return string(b)
 }
 
+// ZlibCompress be data compress to zlib string
 func ZlibCompress(src []byte) (data string, err error) {
 	var in bytes.Buffer
 	w := zlib.NewWriter(&in)
