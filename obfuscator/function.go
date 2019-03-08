@@ -7,6 +7,7 @@ import (
 	"github.com/z7zmey/php-parser/node/expr"
 )
 
+// UserCallObfuscator Conversion function to call_user_func
 var UserCallObfuscator = nodeProcess.NewFunctionCallPrecess("call_user_func", func(n *node.Node) (app []node.Node, cur node.Node) {
 	nn := (*n).(*expr.FunctionCall)
 	var nameNode node.Node

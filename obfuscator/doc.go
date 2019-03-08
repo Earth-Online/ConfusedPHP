@@ -1,9 +1,9 @@
 /*
-obfuscator obfuscator will  Convert a node to another node
+Package obfuscator obfuscator will  Convert a node to another node
 Currently there is
 	- base64
 	- string split
-	- gzcompress
+	- compress
     - call_user_func
 	-  two not
 */
