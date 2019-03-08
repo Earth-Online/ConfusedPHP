@@ -12,6 +12,7 @@ type EditWalker struct {
 	currentNode node.Node
 	beforeNode  node.Node
 	modifyNode  map[node.Node]node.Node
+	addNode     []node.Node
 }
 
 func NewEditWalker(process []nodeProcess.NodePrecess) *EditWalker {
@@ -25,9 +26,11 @@ func (e *EditWalker) EnterNode(w walker.Walkable) bool {
 	}
 	for _, p := range e.process {
 		if p.Check(n, e.currentNode) {
-			_, rep := p.Precess(&n)
+			add, rep := p.Precess(n)
 			if rep != nil {
 				e.modifyNode[n] = rep
+				e.addNode = append(e.addNode, add...)
+				break
 			}
 		}
 	}

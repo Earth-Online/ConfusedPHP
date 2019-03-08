@@ -1,2 +1,2 @@
-// Define node type
+// Package nodetype define node type
 package nodetype

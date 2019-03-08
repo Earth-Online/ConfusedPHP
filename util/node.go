@@ -8,7 +8,7 @@ import (
 	"github.com/z7zmey/php-parser/node/stmt"
 )
 
-// get a arg list
+//GetFunctionArg get a arg list
 func GetFunctionArg(nodes ...node.Node) (n node.Node) {
 	var args []node.Node
 	for _, value := range nodes {
@@ -22,7 +22,7 @@ func GetFunctionArg(nodes ...node.Node) (n node.Node) {
 	return
 }
 
-// get function call. E.g. base64("123")
+// GetFunctionCall get function call. E.g. base64("123")
 func GetFunctionCall(name node.Node, args *node.ArgumentList) (n node.Node) {
 	n = &expr.FunctionCall{
 		Function:     name,
@@ -31,7 +31,7 @@ func GetFunctionCall(name node.Node, args *node.ArgumentList) (n node.Node) {
 	return
 }
 
-// get a only ret value function.E.g function a(){ return 1;}
+// GetFunctionRet get a only ret value function.E.g function a(){ return 1;}
 func GetFunctionRet(funcName string, ret node.Node) (n node.Node) {
 	n = &stmt.Function{
 		FunctionName: &name.Name{
@@ -46,7 +46,7 @@ func GetFunctionRet(funcName string, ret node.Node) (n node.Node) {
 	return
 }
 
-// get a php class. E.g class a {}
+// GetClass get a php class. E.g class a {}
 func GetClass(name string, stmts []node.Node) (n node.Node) {
 	n = &stmt.Class{
 		PhpDocComment: "",
@@ -56,7 +56,7 @@ func GetClass(name string, stmts []node.Node) (n node.Node) {
 	return
 }
 
-// get a php class static fetch e.g foo::abc
+// GetStaticPropertyFetch get a php class static fetch e.g foo::abc
 func GetStaticPropertyFetch(className string, varName string) (n node.Node) {
 	n = &expr.StaticPropertyFetch{
 		Class: &name.Name{
@@ -73,7 +73,7 @@ func GetStaticPropertyFetch(className string, varName string) (n node.Node) {
 	return
 }
 
-// get true if E.g if(1){ echo 1}
+// GetIfTrue get true if E.g if(1){ echo 1}
 func GetIfTrue(stmts node.Node, elseif []node.Node, Else node.Node) (n node.Node) {
 	n = &stmt.If{
 		Cond: &scalar.Lnumber{
@@ -86,6 +86,7 @@ func GetIfTrue(stmts node.Node, elseif []node.Node, Else node.Node) (n node.Node
 	return
 }
 
+// GetArrayFetch get a array and fetch it.
 func GetArrayFetch(array node.Node, fetch node.Node) (n node.Node) {
 	n = &expr.ArrayDimFetch{
 		Variable: array,
@@ -94,6 +95,7 @@ func GetArrayFetch(array node.Node, fetch node.Node) (n node.Node) {
 	return
 }
 
+// GetArray get a Array
 func GetArray(value ...node.Node) (n node.Node) {
 	n = &expr.Array{
 		Items: value,
@@ -101,6 +103,7 @@ func GetArray(value ...node.Node) (n node.Node) {
 	return
 }
 
+// GetStaticCall get a class static call
 func GetStaticCall(className string, funcName string, args node.ArgumentList) (n node.Node) {
 	n = &expr.StaticCall{
 		Class: &name.Name{
