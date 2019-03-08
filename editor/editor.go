@@ -9,13 +9,27 @@ import (
 
 //  EditWalker check have  which node need change
 type EditWalker struct {
-	process []nodeProcess.NodePrecess
-	//currentNode node.Node
-	// beforeNode  node.Node
+	process        []nodeProcess.NodePrecess
 	beforeNode     util.EnterNode
 	beforeNodeList []util.EnterNode
 	modifyNode     map[node.Node]node.Node
 	addNode        []node.Node
+}
+
+func (e *EditWalker) ModifyNode() map[node.Node]node.Node {
+	return e.modifyNode
+}
+
+func (e *EditWalker) SetModifyNode(modifyNode map[node.Node]node.Node) {
+	e.modifyNode = modifyNode
+}
+
+func (e *EditWalker) AddNode() []node.Node {
+	return e.addNode
+}
+
+func (e *EditWalker) SetAddNode(addNode []node.Node) {
+	e.addNode = addNode
 }
 
 func NewEditWalker(process []nodeProcess.NodePrecess) *EditWalker {
