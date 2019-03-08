@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-// php file
+// PhpCode is a php file
 type PhpCode struct {
 	// php file name
 	Content io.Reader
@@ -14,11 +14,12 @@ type PhpCode struct {
 	Code *php7.Parser
 }
 
+// NewPhpCode Construct PhpCode
 func NewPhpCode(content io.Reader) *PhpCode {
 	return &PhpCode{Content: content}
 }
 
-// parser code
+// Parser parser code
 func (s *PhpCode) Parser() (err error) {
 	parser := php7.NewParser(s.Content, "example.php")
 	parser.Parse()
@@ -26,7 +27,7 @@ func (s *PhpCode) Parser() (err error) {
 	return
 }
 
-// get code root node
+// GetRootNode get code root node
 func (s *PhpCode) GetRootNode() node.Node {
 	return s.Code.GetRootNode()
 }
