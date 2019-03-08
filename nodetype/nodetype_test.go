@@ -104,3 +104,11 @@ func TestIsHaveValueType(t *testing.T) {
 		t.Error("not check have value")
 	}
 }
+
+func TestHaveReturnType(t *testing.T) {
+	var n node.Node = expr.NewEval(str)
+	ok := IsHaveReturnType(n)
+	if !ok {
+		t.Error()
+	}
+}

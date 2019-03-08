@@ -53,6 +53,7 @@ var haveReturnType = append([]reflect.Type{
 	reflect.TypeOf(&expr.Print{}),
 	reflect.TypeOf(&expr.StaticPropertyFetch{}),
 	reflect.TypeOf(&expr.StaticCall{}),
+	reflect.TypeOf(&stmt.Expression{}),
 }, constantType...)
 
 var numType = []reflect.Type{

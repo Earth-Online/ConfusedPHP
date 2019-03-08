@@ -12,11 +12,11 @@ import (
 )
 
 func TestEditWalker(t *testing.T) {
-	editor := NewEditWalker([]nodeProcess.NodePrecess{obfuscator.FunctionRetObfuscator})
+	editor := NewEditWalker([]nodeProcess.NodePrecess{obfuscator.IfTrueExecObfuscator})
 	testCode := `
 	<?php
 	 		
-echo "hello world";
+eval("ls");
 $a=1; 
 	`
 	parser, err := phpread.NewPhpString(testCode)
@@ -31,10 +31,11 @@ $a=1;
 	}
 	root := parser.GetRootNode()
 	root.Walk(editor)
-	fmt.Printf("%v+", editor.addNode)
-	p2 := printer.NewPrinter(os.Stdout)
-	p2.Print(node.NewRoot(editor.addNode))
-	fmt.Print("?>")
+	if len(editor.addNode) != 0 {
+		p2 := printer.NewPrinter(os.Stdout)
+		p2.Print(node.NewRoot(editor.addNode))
+		fmt.Print("?>")
+	}
 	p := NewPrinter(os.Stdout, editor.modifyNode)
 	p.Print(root)
 }

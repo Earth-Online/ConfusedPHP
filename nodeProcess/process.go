@@ -1,13 +1,14 @@
 package nodeProcess
 
 import (
+	"github.com/blue-bird1/ConfusedPHP/util"
 	"github.com/z7zmey/php-parser/node"
 )
 
 type NodePrecess interface {
 	Precess(n node.Node) ([]node.Node, node.Node)
 	// Check(n *node.Node, preNode *node.Node) bool
-	Check(n node.Node, preNode node.Node) bool
+	Check(n node.Node, preNode util.EnterNode) bool
 	Name() string
 }
 

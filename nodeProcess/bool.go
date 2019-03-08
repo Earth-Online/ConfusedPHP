@@ -2,6 +2,7 @@ package nodeProcess
 
 import (
 	"github.com/blue-bird1/ConfusedPHP/nodetype"
+	"github.com/blue-bird1/ConfusedPHP/util"
 	"github.com/z7zmey/php-parser/node"
 )
 
@@ -21,6 +22,6 @@ func NewBoolProcess(name string, f func(n node.Node) ([]node.Node, node.Node)) *
 	return precess
 }
 
-func (b BoolProcess) Check(n node.Node, preNode node.Node) bool {
+func (b BoolProcess) Check(n node.Node, preNode util.EnterNode) bool {
 	return nodetype.IsRetBoolType(n)
 }

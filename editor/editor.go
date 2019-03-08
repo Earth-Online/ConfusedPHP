@@ -2,17 +2,20 @@ package editor
 
 import (
 	"github.com/blue-bird1/ConfusedPHP/nodeProcess"
+	"github.com/blue-bird1/ConfusedPHP/util"
 	"github.com/z7zmey/php-parser/node"
 	"github.com/z7zmey/php-parser/walker"
 )
 
 //  EditWalker check have  which node need change
 type EditWalker struct {
-	process     []nodeProcess.NodePrecess
-	currentNode node.Node
-	beforeNode  node.Node
-	modifyNode  map[node.Node]node.Node
-	addNode     []node.Node
+	process []nodeProcess.NodePrecess
+	//currentNode node.Node
+	// beforeNode  node.Node
+	beforeNode     util.EnterNode
+	beforeNodeList []util.EnterNode
+	modifyNode     map[node.Node]node.Node
+	addNode        []node.Node
 }
 
 func NewEditWalker(process []nodeProcess.NodePrecess) *EditWalker {
@@ -25,7 +28,7 @@ func (e *EditWalker) EnterNode(w walker.Walkable) bool {
 		panic("error node")
 	}
 	for _, p := range e.process {
-		if p.Check(n, e.currentNode) {
+		if p.Check(n, e.beforeNode) {
 			add, rep := p.Precess(n)
 			if rep != nil {
 				e.modifyNode[n] = rep
@@ -34,30 +37,44 @@ func (e *EditWalker) EnterNode(w walker.Walkable) bool {
 			}
 		}
 	}
-	//e.currentNode = append(e.currentNode, n)
+
 	return true
 }
 
 func (e *EditWalker) LeaveNode(w walker.Walkable) {
-	//e.currentNode = e.currentNode[:len(e.currentNode)-1]
 	// do nothing
 }
 
 func (e *EditWalker) EnterChildNode(key string, w walker.Walkable) {
-	e.beforeNode = e.currentNode
-	e.currentNode = w.(node.Node)
+	e.beforeNode.Key = key
+	e.beforeNode.Node = w.(node.Node)
+	e.beforeNodeList = append(e.beforeNodeList, e.beforeNode)
 
 }
 
 func (e *EditWalker) LeaveChildNode(key string, w walker.Walkable) {
-	e.currentNode = e.beforeNode
+	e.beforeNode = util.EnterNode{}
+	if len(e.beforeNodeList) != 0 {
+		e.beforeNodeList = e.beforeNodeList[:len(e.beforeNodeList)-1]
+	}
+	if len(e.beforeNodeList) != 0 {
+		e.beforeNode = e.beforeNodeList[len(e.beforeNodeList)-1]
+	}
+
 }
 
 func (e *EditWalker) EnterChildList(key string, w walker.Walkable) {
-	e.beforeNode = e.currentNode
-	e.currentNode = w.(node.Node)
+	e.beforeNode.Key = key
+	e.beforeNode.Node = w.(node.Node)
+	e.beforeNodeList = append(e.beforeNodeList, e.beforeNode)
 }
 
 func (e *EditWalker) LeaveChildList(key string, w walker.Walkable) {
-	e.currentNode = e.beforeNode
+	e.beforeNode = util.EnterNode{}
+	if len(e.beforeNodeList) != 0 {
+		e.beforeNodeList = e.beforeNodeList[:len(e.beforeNodeList)-1]
+	}
+	if len(e.beforeNodeList) != 0 {
+		e.beforeNode = e.beforeNodeList[len(e.beforeNodeList)-1]
+	}
 }

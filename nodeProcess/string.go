@@ -2,6 +2,7 @@ package nodeProcess
 
 import (
 	"github.com/blue-bird1/ConfusedPHP/nodetype"
+	"github.com/blue-bird1/ConfusedPHP/util"
 	"github.com/blue-bird1/ConfusedPHP/varProcess"
 	"github.com/z7zmey/php-parser/node"
 )
@@ -23,7 +24,7 @@ func NewStringPrecess(name string, f func(n string) ([]node.Node, node.Node)) *S
 	return precess
 }
 
-func (s StringPrecess) Check(n node.Node, preNode node.Node) bool {
+func (s StringPrecess) Check(n node.Node, preNode util.EnterNode) bool {
 	return nodetype.IsStringType(n)
 }
 
