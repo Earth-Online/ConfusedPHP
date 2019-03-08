@@ -73,8 +73,8 @@ func GetStaticPropertyFetch(className string, varName string) (n node.Node) {
 	return
 }
 
-// GetIfTrue get true if E.g if(1){ echo 1}
-func GetIfTrue(stmts node.Node, elseif []node.Node, Else node.Node) (n node.Node) {
+// GetIfTrueExec get true if E.g if(1){ echo 1}
+func GetIfTrueExec(stmts node.Node, elseif []node.Node, Else node.Node) (n node.Node) {
 	n = &stmt.If{
 		Cond: &scalar.Lnumber{
 			Value: "1",

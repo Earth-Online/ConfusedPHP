@@ -83,7 +83,9 @@ func (p *Printer) printFreeFloating(n node.Node, pos freefloating.Position) {
 
 func (p *Printer) printNode(n node.Node) {
 	if v, ok := p.modifyNode[n]; ok {
+		delete(p.modifyNode, n)
 		n = v
+
 	}
 
 	switch n.(type) {
